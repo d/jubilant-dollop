@@ -1,5 +1,7 @@
 language: cpp
-cache: ccache
+cache:
+  - pip
+  - ccache
 
 dist: focal
 group: edge
@@ -23,6 +25,9 @@ before_script:
 
 after_script:
   - ccache --show-stats
+
+install:
+  - pip install --user cmakelang
 
 script:
   - CLANG_FORMAT=clang-format-12 hack/fmt chk
