@@ -15,7 +15,7 @@ gen_build_system() {
 	buildtype=$1
 	builddir=$2
 
-	cmake -GNinja -H. -DCMAKE_BUILD_TYPE="${buildtype}" -B"${builddir}"
+	cmake -GNinja -H. -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE="${buildtype}" -B"${builddir}"
 }
 
 # example:

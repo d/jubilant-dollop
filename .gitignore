@@ -1,2 +1,4 @@
 /build.*
 .*.sw[mnop]
+/cmake-build-*
+/.idea
