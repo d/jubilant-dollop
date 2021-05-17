@@ -11,7 +11,6 @@ class Select : public RecordSet {
   std::vector<Record> Records() const override;
 
  private:
-  Record Project(const Record& record) const;
   const RecordSet& child_;
   std::vector<std::string> attributes_;
 };
