@@ -8,6 +8,7 @@
 
 namespace csv_query {
 using Record = std::vector<std::string>;
+using Records = std::vector<Record>;
 
 template <class C>
 auto MakeVector(C&& c) {
