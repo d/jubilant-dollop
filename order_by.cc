@@ -19,7 +19,7 @@ std::vector<Record> OrderBy::Records() const {
   auto i = ranges::find(attrs, order_key_) - attrs.begin();
 
   ranges::sort(ret, std::greater{},
-               [i](const Record& r) { return std::stoi(r[i]); });
+               [i](const Record& r) { return std::stoull(r[i]); });
   return ret;
 }
 }  // namespace csv_query
