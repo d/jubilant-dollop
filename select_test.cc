@@ -8,17 +8,16 @@ using testing::ElementsAre;
 namespace csv_query {
 TEST(SelectTest, Attributes) {
   FakeRecordSet record_set({"a", "b"}, {{"United_States", "300000000"}});
-  Select select(record_set, {"b", "a"});
+  Select select(record_set, "b");
 
-  ASSERT_THAT(select.AttributeNames(), ElementsAre("b", "a"));
+  ASSERT_THAT(select.AttributeNames(), ElementsAre("b"));
 }
 
 TEST(SelectTest, Projection) {
   FakeRecordSet record_set({"a", "b"}, {{"United_States", "300000000"}});
-  Select select(record_set, {"b", "a"});
+  Select select(record_set, "b");
 
-  ASSERT_THAT(select.Records(),
-              ElementsAre(Record{"300000000", "United_States"}));
+  ASSERT_THAT(select.Records(), ElementsAre(Record{"300000000"}));
 }
 
 }  // namespace csv_query

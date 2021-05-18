@@ -6,13 +6,13 @@
 namespace csv_query {
 class Select : public RecordSet {
  public:
-  Select(const RecordSet& child, std::vector<std::string> attributes);
+  Select(const RecordSet& child, std::string attribute);
   std::vector<std::string_view> AttributeNames() const override;
   std::vector<Record> Records() const override;
 
  private:
   const RecordSet& child_;
-  std::vector<std::string> attributes_;
+  const std::string attribute_;
 };
 }  // namespace csv_query
 
