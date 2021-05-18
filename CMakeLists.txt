@@ -7,8 +7,15 @@ if(BUILD_CCACHE)
   set(CMAKE_CXX_COMPILER_LAUNCHER ccache)
 endif()
 
-add_library(CsvQuery STATIC select.cc take.cc order_by.cc join.cc count_by.cc
-                            from.cc)
+add_library(
+  CsvQuery STATIC
+  select.cc
+  take.cc
+  order_by.cc
+  join.cc
+  count_by.cc
+  from.cc
+  fstream_fs.cc)
 
 set(INSTALL_GTEST
     OFF
