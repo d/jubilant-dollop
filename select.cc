@@ -4,6 +4,7 @@
 #include <functional>
 #include <ranges>
 #include <utility>
+#include "stl_extras.h"
 
 namespace ranges = std::ranges;
 namespace views = ranges::views;

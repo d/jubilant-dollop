@@ -4,6 +4,7 @@
 #include <ranges>
 #include <unordered_map>
 #include <utility>
+#include "stl_extras.h"
 
 namespace views = std::ranges::views;
 namespace ranges = std::ranges;
