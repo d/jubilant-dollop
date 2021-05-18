@@ -13,6 +13,7 @@ class RecordSet {
  public:
   virtual std::vector<std::string_view> AttributeNames() const = 0;
   virtual std::vector<Record> Records() const = 0;
+  virtual ~RecordSet() = default;
 };
 }  // namespace csv_query
 

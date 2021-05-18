@@ -15,7 +15,8 @@ add_library(
   join.cc
   count_by.cc
   from.cc
-  fstream_fs.cc)
+  fstream_fs.cc
+  query.cc)
 
 set(INSTALL_GTEST
     OFF
@@ -32,7 +33,8 @@ add_executable(
   count_by_test.cc
   from_test.cc
   fake_fs.cc
-  fs_provider_test.cc)
+  fs_provider_test.cc
+  query_test.cc)
 
 target_link_libraries(csv-query-test CsvQuery gmock_main)
 
