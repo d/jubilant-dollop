@@ -11,6 +11,7 @@ class OperatorFactory {
   virtual RecordSet* DoFrom(std::string name, FsProvider& fs_provider) = 0;
   virtual RecordSet* DoSelect(const RecordSet& child,
                               std::string attribute) = 0;
+  virtual RecordSet* DoTake(const RecordSet& child, size_t limit) = 0;
 
  public:
   auto From(std::string name, FsProvider& fs_provider) {
@@ -19,6 +20,10 @@ class OperatorFactory {
 
   auto Select(const RecordSet& child, std::string attribute) {
     return std::unique_ptr<RecordSet>{DoSelect(child, std::move(attribute))};
+  }
+
+  auto Take(const RecordSet& child, size_t limit) {
+    return std::unique_ptr<RecordSet>{DoTake(child, limit)};
   }
 };
 }  // namespace csv_query

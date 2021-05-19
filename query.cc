@@ -21,6 +21,10 @@ RecordSet* Query::Parse() {
     } else if (token == kSelect) {
       query_ >> token;
       ops_.push_back(factory_.Select(*ops_.back(), token));
+    } else if (token == kTake) {
+      size_t limit;
+      query_ >> limit;
+      ops_.push_back(factory_.Take(*ops_.back(), limit));
     } else [[unlikely]] {
       return nullptr;
     }
