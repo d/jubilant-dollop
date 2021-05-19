@@ -26,58 +26,54 @@ struct MockOperatorFactory : OperatorFactory {
 };
 
 using testing::ByMove;
+using testing::NiceMock;
 using testing::Ref;
 using testing::Return;
 
-TEST(QueryTest, From) {
-  auto record_set =
-      std::unique_ptr<RecordSet>(new FakeRecordSet({"a", "b"}, {}));
-  auto* expected_record_set = record_set.get();
+class QueryTest : public testing::Test {
+ public:
+  QueryTest() {
+    ON_CALL(factory_, DoFrom("city.csv", Ref(fs_)))
+        .WillByDefault(
+            [&record_set = record_set_]() { return record_set.release(); });
+  }
 
-  MockFs fs;
-  MockOperatorFactory factory;
-  Query q(fs, factory, "FROM city.csv");
+ protected:
+  MockFs fs_;
+  NiceMock<MockOperatorFactory> factory_;
+  std::unique_ptr<RecordSet> record_set_{new FakeRecordSet({"a", "b"}, {})};
+};
 
-  EXPECT_CALL(factory, DoFrom("city.csv", Ref(fs)))
+TEST_F(QueryTest, From) {
+  Query q(fs_, factory_, "FROM city.csv");
+
+  EXPECT_CALL(factory_, DoFrom("city.csv", Ref(fs_)))
       .Times(1)
-      .WillOnce([&record_set]() { return record_set.release(); });
+      .WillOnce([&record_set = record_set_]() { return record_set.release(); });
 
-  ASSERT_EQ(q.Parse(), expected_record_set);
+  auto* expected_from_records = record_set_.get();
+  ASSERT_EQ(q.Parse(), expected_from_records);
 }
 
-TEST(QueryTest, Select) {
-  auto* expected_from_records = new FakeRecordSet({"a", "b"}, {});
-  auto from_records = std::unique_ptr<FakeRecordSet>(expected_from_records);
-  auto* expected_select_records = new FakeRecordSet({"b"}, {});
-  auto select_records = std::unique_ptr<FakeRecordSet>(expected_select_records);
+TEST_F(QueryTest, Select) {
+  std::unique_ptr<RecordSet> select_records{new FakeRecordSet({"b"}, {})};
+  auto* expected_select_records = select_records.get();
 
-  MockFs fs;
-  MockOperatorFactory factory;
-  Query q(fs, factory, "FROM city.csv SELECT b");
+  Query q(fs_, factory_, "FROM city.csv SELECT b");
 
-  EXPECT_CALL(factory, DoFrom("city.csv", Ref(fs)))
-      .Times(1)
-      .WillOnce([&from_records]() { return from_records.release(); });
-  EXPECT_CALL(factory, DoSelect(Ref(*expected_from_records), "b"))
+  EXPECT_CALL(factory_, DoSelect(Ref(*record_set_), "b"))
       .WillOnce([&select_records]() { return select_records.release(); });
 
   ASSERT_EQ(q.Parse(), expected_select_records);
 }
 
-TEST(QueryTest, Take) {
-  auto* expected_from_records = new FakeRecordSet({"a", "b"}, {});
-  auto from_records = std::unique_ptr<FakeRecordSet>(expected_from_records);
-  auto* expected_take_records = new FakeRecordSet({"b"}, {});
-  auto take_records = std::unique_ptr<FakeRecordSet>(expected_take_records);
+TEST_F(QueryTest, Take) {
+  std::unique_ptr<RecordSet> take_records{new FakeRecordSet({"a", "b"}, {})};
+  auto* expected_take_records = take_records.get();
 
-  MockFs fs;
-  MockOperatorFactory factory;
-  Query q(fs, factory, "FROM city.csv TAKE 42");
+  Query q(fs_, factory_, "FROM city.csv TAKE 42");
 
-  EXPECT_CALL(factory, DoFrom("city.csv", Ref(fs)))
-      .Times(1)
-      .WillOnce([&from_records]() { return from_records.release(); });
-  EXPECT_CALL(factory, DoTake(Ref(*expected_from_records), 42))
+  EXPECT_CALL(factory_, DoTake(Ref(*record_set_), 42))
       .WillOnce([&take_records]() { return take_records.release(); });
 
   ASSERT_EQ(q.Parse(), expected_take_records);
