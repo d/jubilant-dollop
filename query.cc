@@ -28,6 +28,13 @@ RecordSet* Query::Parse() {
     } else if (token == kOrderBy) {
       query_ >> token;
       ops_.push_back(factory_.OrderBy(*ops_.back(), token));
+    } else if (token == kJoin) {
+      auto& lhs = *ops_.back();
+      query_ >> token;
+      ops_.push_back(factory_.From(token, fs_provider_));
+      auto& rhs = *ops_.back();
+      query_ >> token;
+      ops_.push_back(factory_.Join(lhs, rhs, token));
     } else if (token == kCountBy) {
       query_ >> token;
       ops_.push_back(factory_.CountBy(*ops_.back(), token));

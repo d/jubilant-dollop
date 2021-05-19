@@ -16,6 +16,9 @@ class OperatorFactory {
                                std::string order_key) = 0;
   virtual RecordSet* DoCountBy(const RecordSet& child,
                                std::string group_key) = 0;
+  virtual RecordSet* DoJoin(const RecordSet& lhs,
+                            const RecordSet& rhs,
+                            std::string join_key) = 0;
 
  public:
   auto From(std::string name, FsProvider& fs_provider) {
@@ -35,7 +38,11 @@ class OperatorFactory {
   }
 
   auto CountBy(const RecordSet& child, std::string group_key) {
-    return std::unique_ptr<RecordSet>{DoCountBy(child, group_key)};
+    return std::unique_ptr<RecordSet>{DoCountBy(child, std::move(group_key))};
+  }
+
+  auto Join(const RecordSet& lhs, const RecordSet& rhs, std::string join_key) {
+    return std::unique_ptr<RecordSet>{DoJoin(lhs, rhs, std::move(join_key))};
   }
 };
 }  // namespace csv_query

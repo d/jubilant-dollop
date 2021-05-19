@@ -33,6 +33,13 @@ struct MockOperatorFactory : OperatorFactory {
               DoCountBy,
               (const RecordSet& child, std::string group_key),
               (override));
+
+  MOCK_METHOD(RecordSet*,
+              DoJoin,
+              (const RecordSet& lhs,
+               const RecordSet& rhs,
+               std::string join_key),
+              (override));
 };
 
 using testing::ByMove;
@@ -113,6 +120,24 @@ TEST_F(QueryTest, CountBy) {
       .WillOnce([&count_by_records]() { return count_by_records.release(); });
 
   ASSERT_EQ(q.Parse(), expected_count_by_records);
+}
+
+TEST_F(QueryTest, Join) {
+  std::unique_ptr<RecordSet> rhs{new FakeRecordSet{{"b", "c"}, {}}};
+  std::unique_ptr<RecordSet> join_records{
+      new FakeRecordSet({"a", "b", "c"}, {})};
+  auto* expected_join_records = join_records.get();
+
+  Query q(fs_, factory_, "FROM city.csv JOIN country.csv b");
+
+  EXPECT_CALL(factory_, DoFrom("city.csv", Ref(fs_)));
+  EXPECT_CALL(factory_, DoFrom("country.csv", Ref(fs_))).WillOnce([&rhs]() {
+    return rhs.release();
+  });
+  EXPECT_CALL(factory_, DoJoin(Ref(*record_set_), Ref(*rhs), "b"))
+      .WillOnce([&join_records]() { return join_records.release(); });
+
+  ASSERT_EQ(q.Parse(), expected_join_records);
 }
 
 }  // namespace csv_query
