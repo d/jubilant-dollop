@@ -13,12 +13,10 @@ class FsProvider {
  private:
   auto Lines(const std::string& name) {
     namespace ranges = std::ranges;
-    namespace views = std::ranges::views;
 
-    auto chars_from_file =
+    return csv_query::Lines(
         ranges::subrange(std::istreambuf_iterator<char>(DoOpen(name)),
-                         std::istreambuf_iterator<char>());
-    return chars_from_file | views::split('\n') | views::transform(MakeString);
+                         std::istreambuf_iterator<char>()));
   }
 
  public:

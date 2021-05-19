@@ -22,7 +22,7 @@ class OperatorFactory {
 
  public:
   auto From(std::string name, FsProvider& fs_provider) {
-    return std::unique_ptr<RecordSet>{DoFrom(name, fs_provider)};
+    return std::unique_ptr<RecordSet>{DoFrom(std::move(name), fs_provider)};
   }
 
   auto Select(const RecordSet& child, std::string attribute) {

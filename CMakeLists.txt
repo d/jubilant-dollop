@@ -8,7 +8,7 @@ if(BUILD_CCACHE)
 endif()
 
 add_library(
-  CsvQuery STATIC
+  CsvQueryLib STATIC
   select.cc
   take.cc
   order_by.cc
@@ -16,7 +16,12 @@ add_library(
   count_by.cc
   from.cc
   fstream_fs.cc
-  query.cc)
+  query.cc
+  real_fs.cc
+  real_operator_factory.cc)
+
+add_executable(CsvQuery main.cc)
+target_link_libraries(CsvQuery CsvQueryLib)
 
 set(INSTALL_GTEST
     OFF
@@ -36,7 +41,7 @@ add_executable(
   fs_provider_test.cc
   query_test.cc)
 
-target_link_libraries(csv-query-test CsvQuery gmock_main)
+target_link_libraries(csv-query-test CsvQueryLib gmock_main)
 
 include(GoogleTest)
 enable_testing()
