@@ -31,6 +31,6 @@ install:
 
 script:
   - CLANG_FORMAT=clang-format-12 hack/fmt chk
-  - CC=gcc-10 CXX=g++-10 LDFLAGS=-fuse-ld=lld hack/hack gen Debug build
+  - CC=gcc-10 CXX=g++-10 CXXFLAGS=-fsanitize=address LDFLAGS=-fuse-ld=lld hack/hack gen Debug build
   - hack/hack test build
 
