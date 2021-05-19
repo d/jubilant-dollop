@@ -25,6 +25,12 @@ RecordSet* Query::Parse() {
       size_t limit;
       query_ >> limit;
       ops_.push_back(factory_.Take(*ops_.back(), limit));
+    } else if (token == kOrderBy) {
+      query_ >> token;
+      ops_.push_back(factory_.OrderBy(*ops_.back(), token));
+    } else if (token == kCountBy) {
+      query_ >> token;
+      ops_.push_back(factory_.CountBy(*ops_.back(), token));
     } else [[unlikely]] {
       return nullptr;
     }

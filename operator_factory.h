@@ -12,6 +12,10 @@ class OperatorFactory {
   virtual RecordSet* DoSelect(const RecordSet& child,
                               std::string attribute) = 0;
   virtual RecordSet* DoTake(const RecordSet& child, size_t limit) = 0;
+  virtual RecordSet* DoOrderBy(const RecordSet& child,
+                               std::string order_key) = 0;
+  virtual RecordSet* DoCountBy(const RecordSet& child,
+                               std::string group_key) = 0;
 
  public:
   auto From(std::string name, FsProvider& fs_provider) {
@@ -24,6 +28,14 @@ class OperatorFactory {
 
   auto Take(const RecordSet& child, size_t limit) {
     return std::unique_ptr<RecordSet>{DoTake(child, limit)};
+  }
+
+  auto OrderBy(const RecordSet& child, std::string order_key) {
+    return std::unique_ptr<RecordSet>{DoOrderBy(child, std::move(order_key))};
+  }
+
+  auto CountBy(const RecordSet& child, std::string group_key) {
+    return std::unique_ptr<RecordSet>{DoCountBy(child, group_key)};
   }
 };
 }  // namespace csv_query

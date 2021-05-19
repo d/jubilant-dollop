@@ -23,6 +23,16 @@ struct MockOperatorFactory : OperatorFactory {
               DoTake,
               (const RecordSet& child, size_t limit),
               (override));
+
+  MOCK_METHOD(RecordSet*,
+              DoOrderBy,
+              (const RecordSet& child, std::string order_key),
+              (override));
+
+  MOCK_METHOD(RecordSet*,
+              DoCountBy,
+              (const RecordSet& child, std::string group_key),
+              (override));
 };
 
 using testing::ByMove;
@@ -77,6 +87,32 @@ TEST_F(QueryTest, Take) {
       .WillOnce([&take_records]() { return take_records.release(); });
 
   ASSERT_EQ(q.Parse(), expected_take_records);
+}
+
+TEST_F(QueryTest, OrderBy) {
+  std::unique_ptr<RecordSet> order_by_records{
+      new FakeRecordSet({"a", "b"}, {})};
+  auto* expected_order_by_records = order_by_records.get();
+
+  Query q(fs_, factory_, "FROM city.csv ORDERBY b");
+
+  EXPECT_CALL(factory_, DoOrderBy(Ref(*record_set_), "b"))
+      .WillOnce([&order_by_records]() { return order_by_records.release(); });
+
+  ASSERT_EQ(q.Parse(), expected_order_by_records);
+}
+
+TEST_F(QueryTest, CountBy) {
+  std::unique_ptr<RecordSet> count_by_records{
+      new FakeRecordSet({"b", "count"}, {})};
+  auto* expected_count_by_records = count_by_records.get();
+
+  Query q(fs_, factory_, "FROM city.csv COUNTBY b");
+
+  EXPECT_CALL(factory_, DoCountBy(Ref(*record_set_), "b"))
+      .WillOnce([&count_by_records]() { return count_by_records.release(); });
+
+  ASSERT_EQ(q.Parse(), expected_count_by_records);
 }
 
 }  // namespace csv_query
