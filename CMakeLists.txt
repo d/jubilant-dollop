@@ -20,6 +20,9 @@ add_library(
   real_fs.cc
   real_operator_factory.cc)
 
+add_subdirectory(vendor/range-v3)
+target_link_libraries(CsvQueryLib range-v3)
+
 add_executable(CsvQuery main.cc)
 target_link_libraries(CsvQuery CsvQueryLib)
 

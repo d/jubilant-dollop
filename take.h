@@ -1,7 +1,6 @@
 #ifndef CSVQUERY__TAKE_H_
 #define CSVQUERY__TAKE_H_
 
-#include <ranges>
 #include "record_set.h"
 
 namespace csv_query {

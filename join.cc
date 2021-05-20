@@ -1,13 +1,12 @@
 #include "join.h"
 
-#include <algorithm>
 #include <functional>
 #include <map>
-#include <ranges>
+#include <range/v3/algorithm.hpp>
+#include <range/v3/view.hpp>
 #include <utility>
 
-namespace ranges = std::ranges;
-namespace views = std::ranges::views;
+namespace views = ranges::views;
 
 namespace csv_query {
 Join::Join(const RecordSet& lhs, const RecordSet& rhs, std::string join_key)

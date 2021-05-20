@@ -1,12 +1,11 @@
 #include "select.h"
 
-#include <algorithm>
 #include <functional>
-#include <ranges>
+#include <range/v3/algorithm.hpp>
+#include <range/v3/view.hpp>
 #include <utility>
 #include "stl_extras.h"
 
-namespace ranges = std::ranges;
 namespace views = ranges::views;
 
 namespace csv_query {

@@ -1,9 +1,7 @@
 #include "order_by.h"
 
-#include <algorithm>
+#include <range/v3/algorithm.hpp>
 #include <utility>
-
-namespace ranges = std::ranges;
 
 namespace csv_query {
 OrderBy::OrderBy(const RecordSet& child, std::string order_key)

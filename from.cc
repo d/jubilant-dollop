@@ -1,10 +1,10 @@
 #include "from.h"
 
-#include <ranges>
+#include <range/v3/view.hpp>
 #include <utility>
 #include "stl_extras.h"
 
-namespace views = std::ranges::views;
+namespace views = ranges::views;
 
 namespace csv_query {
 static Record FromLine(const std::string& line) {

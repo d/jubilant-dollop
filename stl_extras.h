@@ -1,23 +1,23 @@
 #ifndef CSVQUERY__STL_EXTRAS_H_
 #define CSVQUERY__STL_EXTRAS_H_
 
-#include <algorithm>
 #include <iterator>
 #include <numeric>
-#include <ranges>
+#include <range/v3/algorithm.hpp>
+#include <range/v3/view.hpp>
 #include <string>
 #include <vector>
 
 namespace csv_query {
 template <class R, class T>
-concept RangeOf = std::ranges::range<R> && requires(const R& r) {
-  { *std::ranges::begin(r) } -> std::convertible_to<T>;
+concept RangeOf = ranges::range<R> && requires(const R& r) {
+  { *ranges::begin(r) } -> std::convertible_to<T>;
 };
 
 template <class C>
 auto MakeVector(C&& c) {
   std::vector<std::remove_reference_t<decltype(*c.begin())>> v;
-  std::ranges::copy(c, std::back_inserter(v));
+  ranges::copy(c, std::back_inserter(v));
   return v;
 }
 
@@ -26,7 +26,7 @@ struct MakeStringFn {
   template <RangeOf<char> C>
   std::string operator()(C&& c) const {
     std::string s;
-    std::ranges::copy(std::forward<C>(c), std::back_inserter(s));
+    ranges::copy(std::forward<C>(c), std::back_inserter(s));
     return s;
   }
 };
@@ -36,7 +36,7 @@ struct MakeStringFn {
 inline constexpr internal::MakeStringFn MakeString;
 
 auto StrSplit(RangeOf<char> auto s, auto delimiter) {
-  namespace views = std::ranges::views;
+  namespace views = ranges::views;
 
   std::vector<std::string> ret;
   return s | views::split(delimiter) | views::transform(MakeString);

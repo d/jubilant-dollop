@@ -1,13 +1,12 @@
 #include "count_by.h"
 
-#include <algorithm>
-#include <ranges>
+#include <range/v3/algorithm.hpp>
+#include <range/v3/view.hpp>
 #include <unordered_map>
 #include <utility>
 #include "stl_extras.h"
 
-namespace views = std::ranges::views;
-namespace ranges = std::ranges;
+namespace views = ranges::views;
 
 namespace csv_query {
 CountBy::CountBy(const RecordSet& child, std::string group_key)

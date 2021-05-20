@@ -4,11 +4,7 @@
 #include "stl_extras.h"
 
 #include <iostream>
-#include <ranges>
 #include <string>
-
-namespace ranges = std::ranges;
-namespace views = std::ranges::views;
 
 namespace csv_query {
 namespace {
