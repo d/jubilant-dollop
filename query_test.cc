@@ -16,7 +16,7 @@ struct MockOperatorFactory : OperatorFactory {
 
   MOCK_METHOD(RecordSet*,
               DoSelect,
-              (const RecordSet& child, std::string attribute),
+              (const RecordSet& child, std::vector<std::string> attributes),
               (override));
 
   MOCK_METHOD(RecordSet*,
@@ -43,6 +43,7 @@ struct MockOperatorFactory : OperatorFactory {
 };
 
 using testing::ByMove;
+using testing::ElementsAre;
 using testing::NiceMock;
 using testing::Ref;
 using testing::Return;
@@ -73,12 +74,12 @@ TEST_F(QueryTest, From) {
 }
 
 TEST_F(QueryTest, Select) {
-  std::unique_ptr<RecordSet> select_records{new FakeRecordSet({"b"}, {})};
+  std::unique_ptr<RecordSet> select_records{new FakeRecordSet({"b", "a"}, {})};
   auto* expected_select_records = select_records.get();
 
-  Query q(fs_, factory_, "FROM city.csv SELECT b");
+  Query q(fs_, factory_, "FROM city.csv SELECT b,a");
 
-  EXPECT_CALL(factory_, DoSelect(Ref(*record_set_), "b"))
+  EXPECT_CALL(factory_, DoSelect(Ref(*record_set_), ElementsAre("b", "a")))
       .WillOnce([&select_records]() { return select_records.release(); });
 
   ASSERT_EQ(q.Parse(), expected_select_records);

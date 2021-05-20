@@ -13,8 +13,8 @@ RecordSet* RealOperatorFactory::DoFrom(std::string name,
 }
 
 RecordSet* RealOperatorFactory::DoSelect(const RecordSet& child,
-                                         std::string attribute) {
-  return new class Select(child, std::move(attribute));
+                                         std::vector<std::string> attributes) {
+  return new class Select(child, std::move(attributes));
 }
 
 RecordSet* RealOperatorFactory::DoTake(const RecordSet& child, size_t limit) {

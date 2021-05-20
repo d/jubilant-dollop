@@ -10,7 +10,7 @@ namespace csv_query {
 class OperatorFactory {
   virtual RecordSet* DoFrom(std::string name, FsProvider& fs_provider) = 0;
   virtual RecordSet* DoSelect(const RecordSet& child,
-                              std::string attribute) = 0;
+                              std::vector<std::string> attributes) = 0;
   virtual RecordSet* DoTake(const RecordSet& child, size_t limit) = 0;
   virtual RecordSet* DoOrderBy(const RecordSet& child,
                                std::string order_key) = 0;
@@ -25,8 +25,8 @@ class OperatorFactory {
     return std::unique_ptr<RecordSet>{DoFrom(std::move(name), fs_provider)};
   }
 
-  auto Select(const RecordSet& child, std::string attribute) {
-    return std::unique_ptr<RecordSet>{DoSelect(child, std::move(attribute))};
+  auto Select(const RecordSet& child, std::vector<std::string> attributes) {
+    return std::unique_ptr<RecordSet>{DoSelect(child, std::move(attributes))};
   }
 
   auto Take(const RecordSet& child, size_t limit) {

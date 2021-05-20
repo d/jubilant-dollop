@@ -11,7 +11,8 @@ class RealOperatorFactory final : public OperatorFactory {
 
  private:
   RecordSet* DoFrom(std::string name, FsProvider& fs_provider) override;
-  RecordSet* DoSelect(const RecordSet& child, std::string attribute) override;
+  RecordSet* DoSelect(const RecordSet& child,
+                      std::vector<std::string> attributes) override;
   RecordSet* DoTake(const RecordSet& child, size_t limit) override;
   RecordSet* DoOrderBy(const RecordSet& child, std::string order_key) override;
   RecordSet* DoCountBy(const RecordSet& child, std::string group_key) override;

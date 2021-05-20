@@ -35,10 +35,15 @@ struct MakeStringFn {
 // Construct a string given a range of chars
 inline constexpr internal::MakeStringFn MakeString;
 
-auto Lines(RangeOf<char> auto r) {
+auto StrSplit(RangeOf<char> auto s, auto delimiter) {
   namespace views = std::ranges::views;
 
-  return r | views::split('\n') | views::transform(MakeString);
+  std::vector<std::string> ret;
+  return s | views::split(delimiter) | views::transform(MakeString);
+}
+
+auto Lines(RangeOf<char> auto r) {
+  return StrSplit(r, '\n');
 }
 
 std::string StrJoin(RangeOf<std::string_view> auto r,

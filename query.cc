@@ -20,7 +20,8 @@ RecordSet* Query::Parse() {
       ops_.push_back(factory_.From(token, fs_provider_));
     } else if (token == kSelect) {
       query_ >> token;
-      ops_.push_back(factory_.Select(*ops_.back(), token));
+      auto attributes = MakeVector(StrSplit(token, ','));
+      ops_.push_back(factory_.Select(*ops_.back(), std::move(attributes)));
     } else if (token == kTake) {
       size_t limit;
       query_ >> limit;
