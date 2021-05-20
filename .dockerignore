@@ -1,0 +1,8 @@
+**/build.*
+**/.*.sw[mnop]
+**/cmake-build-*
+/.idea
+.dockerignore
+Dockerfile
+README.md
+*.csv

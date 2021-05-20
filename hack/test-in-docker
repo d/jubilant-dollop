@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+set -e -u -o pipefail
+
+_main() {
+	local TOPLEVEL
+	TOPLEVEL=$(git rev-parse --show-toplevel)
+	cd "${TOPLEVEL}"
+
+	docker build .
+
+	docker run --rm -ti --volume "${PWD}":/data:ro --workdir /data "$(docker build -q .)" CsvQuery
+}
+
+_main "$@"
