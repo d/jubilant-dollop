@@ -30,6 +30,7 @@ install:
   - pip install --user cmakelang
 
 script:
+  - shellcheck hack/*
   - CLANG_FORMAT=clang-format-12 hack/fmt chk
   - CC=gcc-10 CXX=g++-10 CXXFLAGS=-fsanitize=address LDFLAGS=-fuse-ld=lld hack/hack gen Debug build
   - hack/hack test build

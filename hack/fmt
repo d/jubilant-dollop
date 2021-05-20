@@ -10,12 +10,14 @@ files_to_format() {
 }
 
 fmt() {
+	shfmt -w hack/{hack,fmt}
 	cmake-format --in-place CMakeLists.txt
 	files_to_format | parallel -P +0 -0 \
 		"${CLANG_FORMAT}" -i
 }
 
 chk() {
+	shfmt -d hack/{hack,fmt}
 	cmake-format --check CMakeLists.txt
 	# --halt: fail as soon as we encounter the first formatting diagnostic
 	files_to_format | parallel -q -0 \
